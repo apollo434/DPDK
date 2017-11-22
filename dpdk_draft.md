@@ -33,7 +33,7 @@ Typical services expected from the EAL are:
 
 **EAL Initialization in a Linux Application Environment**
 
-Part of the initialization is done by the start function of glibc. A check is also performed at initialization time to ensure that the micro architecture type chosen in the config file is supported by the CPU. Then, the main() function is called. The core initialization and launch is done in rte_eal_init() (see the API documentation). It consist of calls to the pthread library (more specifically, pthread_self(), pthread_create(), and pthread_setaffinity_np()).
+Part of the initialization is done by the start function of glibc. A check is also performed at initialization time to ensure that the micro architecture type chosen in the config file is supported by the CPU. Then, the main() function is called. The core initialization and launch is done in **rte_eal_init()** (see the API documentation). It consist of calls to the pthread library **(more specifically, pthread_self(), pthread_create(), and pthread_setaffinity_np())**.
 
 ![Alt text](/pic/EAL_Init.png)
 ***
@@ -52,7 +52,23 @@ http://dpdk.org/doc/guides/prog_guide/env_abstraction_layer.html**
 
 In DPDK PMD, the only interrupts handled by the dedicated host thread are those for link status change (link up and link down notification) and for sudden device removal.
 ***
-### RX Interrupt Event
+### PCI Access
+
+The EAL uses the **/sys/bus/pci** utilities provided by the kernel to scan the content on the PCI bus. To access PCI memory, a kernel module called uio_pci_generic provides a **/dev/uioX** device file and resource files in **/sys** that can be mmap’d to obtain access to PCI address space from the application. The DPDK-specific **igb_uio** module can also be used for this. Both drivers use the uio kernel feature (userland driver).
+
+### User Space Interrupt Event
+
+#### User Space Interrupt and Alarm Handling in Host Thread
+
+The EAL creates a host thread to poll the UIO device file descriptors to detect the interrupts. Callbacks can be registered or unregistered by the EAL functions for a specific interrupt event and are called in the host thread asynchronously. The EAL also allows timed callbacks to be used in the same way as for NIC interrupts.
+
+*****
+**Note**
+
+In DPDK PMD, the only interrupts handled by the dedicated host thread are those for link status change (link up and link down notification) and for sudden device removal.
+*****
+
+#### RX Interrupt Event
 
 The receive and transmit routines provided by each PMD don’t limit themselves to execute in polling thread mode. To ease the idle polling with tiny throughput, it’s useful to pause the polling and wait until the wake-up event happens. The RX interrupt is the first choice to be such kind of wake-up event, but probably won’t be the only one.
 
@@ -63,6 +79,20 @@ EAL initializes the mapping between event file descriptors and interrupt vectors
 ***
 **Note**
 
-Per queue RX interrupt event is only allowed in VFIO which supports multiple MSI-X vector. In UIO, the RX interrupt together with other interrupt causes shares the same vector. In this case, when RX interrupt and LSC(link status change) interrupt are both enabled(intr_conf.lsc == 1 && intr_conf.rxq == 1), only the former is capable.
+Per queue RX interrupt event is only allowed in VFIO which supports multiple MSI-X vector. In UIO, the RX interrupt together with other interrupt causes shares the same vector. In this case, when RX interrupt and LSC(link status change) interrupt are both enabled**(intr_conf.lsc == 1 && intr_conf.rxq == 1)**, only the former is capable.
 ***
-The RX interrupt are controlled/enabled/disabled by ethdev APIs - ‘rte_eth_dev_rx_intr_*’. They return failure if the PMD hasn’t support them yet. The intr_conf.rxq flag is used to turn on the capability of RX interrupt per device.
+The RX interrupt are controlled/enabled/disabled by ethdev APIs - **‘rte_eth_dev_rx_intr_*’**. They return failure if the PMD hasn’t support them yet. The **intr_conf.rxq** flag is used to turn on the capability of RX interrupt per device.
+
+
+
+#### Device Removal Event
+
+This event is triggered by a device being removed at a bus level. Its underlying resources may have been made unavailable (i.e. PCI mappings unmapped). The PMD must make sure that on such occurrence, the application can still safely use its callbacks.
+
+This event can be subscribed to in the same way one would subscribe to a link status change event. The execution context is thus the same, i.e. it is the dedicated interrupt host thread.
+
+Considering this, it is likely that an application would want to close a device having emitted a Device Removal Event. In such case, calling **rte_eth_dev_close()** can trigger it to unregister its own Device Removal Event callback. Care must be taken not to close the device from the interrupt handler context. It is necessary to reschedule such closing operation.
+
+#### Blacklisting
+
+The EAL PCI device blacklist functionality can be used to mark certain NIC ports as blacklisted, so **they are ignored by the DPDK.** The ports to be blacklisted are identified using the PCIe* description **(Domain:Bus:Device.Function).**
