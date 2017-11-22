@@ -17,15 +17,15 @@ The Environment Abstraction Layer (EAL) is responsible for gaining access to low
 
 Typical services expected from the EAL are:
 
-    DPDK Loading and Launching: The DPDK and its application are linked as a single application and must be loaded by some means.
-    Core Affinity/Assignment Procedures: The EAL provides mechanisms for assigning execution units to specific cores as well as creating execution instances.
-    System Memory Reservation: The EAL facilitates the reservation of different memory zones, for example, physical memory areas for device interactions.
-    PCI Address Abstraction: The EAL provides an interface to access PCI address space.
-    Trace and Debug Functions: Logs, dump_stack, panic and so on.
-    Utility Functions: Spinlocks and atomic counters that are not provided in libc.
-    CPU Feature Identification: Determine at runtime if a particular feature, for example, Intel® AVX is supported. Determine if the current CPU supports the feature set that the binary was compiled for.
-    Interrupt Handling: Interfaces to register/unregister callbacks to specific interrupt sources.
-    Alarm Functions: Interfaces to set/remove callbacks to be run at a specific time.
+* DPDK Loading and Launching: The DPDK and its application are linked as a single application and must be loaded by some means.
+* Core Affinity/Assignment Procedures: The EAL provides mechanisms for assigning execution units to specific cores as well as creating execution instances.
+* System Memory Reservation: The EAL facilitates the reservation of different memory zones, for example, physical memory areas for device interactions.
+* PCI Address Abstraction: The EAL provides an interface to access PCI address space.
+* Trace and Debug Functions: Logs, dump_stack, panic and so on.
+* Utility Functions: Spinlocks and atomic counters that are not provided in libc.
+* CPU Feature Identification: Determine at runtime if a particular feature, for example, Intel® AVX is supported. Determine if the current CPU supports the feature set that the binary was compiled for.
+* Interrupt Handling: Interfaces to register/unregister callbacks to specific interrupt sources.
+* Alarm Functions: Interfaces to set/remove callbacks to be run at a specific time.
 ***
 **UIO overview**
 ![Alt text](/pic/UIO_overview.png)
