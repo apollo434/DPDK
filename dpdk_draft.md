@@ -514,6 +514,62 @@ pci_uio_map_resource_by_index() (lib/librte_eal/linuxapp/eal/eal_pci_uio.c)
  *
  */
 ==========================================================================
+Regarding how to crate a application for dpdk, please make this function as an example below:
+
+/*
+ * The key functions:
+ * 1. rte_eth_dev_configure
+ * 2. rte_eth_rx_queue_setup
+ * 3. rte_eth_tx_queue_setup
+ * 4. rte_eth_dev_start
+ * 
+ */
+
+examples/kni/main.c
+
+/* Initialise a single port on an Ethernet device */
+static void
+init_port(uint8_t port)
+{
+        int ret;
+        uint16_t nb_rxd = NB_RXD;
+        uint16_t nb_txd = NB_TXD;
+
+        /* Initialise device and RX/TX queues */
+        RTE_LOG(INFO, APP, "Initialising port %u ...\n", (unsigned)port);
+        fflush(stdout);
+        ret = rte_eth_dev_configure(port, 1, 1, &port_conf);
+        if (ret < 0)
+                rte_exit(EXIT_FAILURE, "Could not configure port%u (%d)\n",
+                            (unsigned)port, ret);
+
+        ret = rte_eth_dev_adjust_nb_rx_tx_desc(port, &nb_rxd, &nb_txd);
+        if (ret < 0)
+                rte_exit(EXIT_FAILURE, "Could not adjust number of descriptors "
+                                "for port%u (%d)\n", (unsigned)port, ret);
+
+        ret = rte_eth_rx_queue_setup(port, 0, nb_rxd,
+                rte_eth_dev_socket_id(port), NULL, pktmbuf_pool);
+        if (ret < 0)
+                rte_exit(EXIT_FAILURE, "Could not setup up RX queue for "
+                                "port%u (%d)\n", (unsigned)port, ret);
+
+        ret = rte_eth_tx_queue_setup(port, 0, nb_txd,
+                rte_eth_dev_socket_id(port), NULL);
+        if (ret < 0)
+                rte_exit(EXIT_FAILURE, "Could not setup up TX queue for "
+                                "port%u (%d)\n", (unsigned)port, ret);
+
+        ret = rte_eth_dev_start(port);
+        if (ret < 0)
+                rte_exit(EXIT_FAILURE, "Could not start port%u (%d)\n",
+                                                (unsigned)port, ret);
+
+        if (promiscuous_on)
+                rte_eth_promiscuous_enable(port);
+}
+
+
 
 
 ```
