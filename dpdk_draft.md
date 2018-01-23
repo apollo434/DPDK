@@ -522,7 +522,7 @@ Regarding how to crate a application for dpdk, please make this function as an e
  * 2. rte_eth_rx_queue_setup
  * 3. rte_eth_tx_queue_setup
  * 4. rte_eth_dev_start
- * 
+ *
  */
 
 examples/kni/main.c
@@ -569,8 +569,267 @@ init_port(uint8_t port)
                 rte_eth_promiscuous_enable(port);
 }
 
+==========================================================================
+The key structures:
+
+1. struct rte_eth_dev
+2. struct rte_eth_dev_data /**< Pointer to device data */
+3. struct eth_dev_ops      /**< Functions exported by PMD */
+4.
 
 
+
+/**
+ * @internal
+ * The generic data structure associated with each ethernet device.
+ *
+ * Pointers to burst-oriented packet receive and transmit functions are
+ * located at the beginning of the structure, along with the pointer to
+ * where all the data elements for the particular device are stored in shared
+ * memory. This split allows the function pointer and driver data to be per-
+ * process, while the actual configuration data for the device is shared.
+ */
+struct rte_eth_dev {
+        eth_rx_burst_t rx_pkt_burst; /**< Pointer to PMD receive function. */
+        eth_tx_burst_t tx_pkt_burst; /**< Pointer to PMD transmit function. */
+        eth_tx_prep_t tx_pkt_prepare; /**< Pointer to PMD transmit prepare function. */
+        struct rte_eth_dev_data *data;  /**< Pointer to device data */
+        const struct eth_dev_ops *dev_ops; /**< Functions exported by PMD */
+        struct rte_device *device; /**< Backing device */
+        struct rte_intr_handle *intr_handle; /**< Device interrupt handle */
+        /** User application callbacks for NIC interrupts */
+        struct rte_eth_dev_cb_list link_intr_cbs;
+        /**  
+         * User-supplied functions called from rx_burst to post-process
+         * received packets before passing them to the user
+         */
+        struct rte_eth_rxtx_callback *post_rx_burst_cbs[RTE_MAX_QUEUES_PER_PORT];
+        /**  
+         * User-supplied functions called from tx_burst to pre-process
+         * received packets before passing them to the driver for transmission.
+         */
+        struct rte_eth_rxtx_callback *pre_tx_burst_cbs[RTE_MAX_QUEUES_PER_PORT];
+        enum rte_eth_dev_state state; /**< Flag indicating the port state */
+} __rte_cache_aligned;
+
+
+/**
+ * @internal
+ * The data part, with no function pointers, associated with each ethernet device.
+ *
+ * This structure is safe to place in shared memory to be common among different
+ * processes in a multi-process configuration.
+ */     
+struct rte_eth_dev_data {
+        char name[RTE_ETH_NAME_MAX_LEN]; /**< Unique identifier name */
+
+        void **rx_queues; /**< Array of pointers to RX queues. */
+        void **tx_queues; /**< Array of pointers to TX queues. */
+        uint16_t nb_rx_queues; /**< Number of RX queues. */
+        uint16_t nb_tx_queues; /**< Number of TX queues. */
+
+        struct rte_eth_dev_sriov sriov;    /**< SRIOV data */
+
+        void *dev_private;              /**< PMD-specific private data */
+
+        struct rte_eth_link dev_link;
+        /**< Link-level information & status */
+
+        struct rte_eth_conf dev_conf;   /**< Configuration applied to device. */
+        uint16_t mtu;                   /**< Maximum Transmission Unit. */
+
+        uint32_t min_rx_buf_size;
+        /**< Common rx buffer size handled by all queues */
+
+        uint64_t rx_mbuf_alloc_failed; /**< RX ring mbuf allocation failures. */
+        struct ether_addr* mac_addrs;/**< Device Ethernet Link address. */
+        uint64_t mac_pool_sel[ETH_NUM_RECEIVE_MAC_ADDR];
+        /** bitmap array of associating Ethernet MAC addresses to pools */
+        struct ether_addr* hash_mac_addrs;
+        /** Device Ethernet MAC addresses of hash filtering. */
+        uint16_t port_id;           /**< Device [external] port identifier. */
+        __extension__
+        uint8_t promiscuous   : 1, /**< RX promiscuous mode ON(1) / OFF(0). */
+                scattered_rx : 1,  /**< RX of scattered packets is ON(1) / OFF(0) */
+                all_multicast : 1, /**< RX all multicast mode ON(1) / OFF(0). */
+                dev_started : 1,   /**< Device state: STARTED(1) / STOPPED(0). */
+                lro         : 1;   /**< RX LRO is ON(1) / OFF(0) */
+        uint8_t rx_queue_state[RTE_MAX_QUEUES_PER_PORT];
+        /** Queues state: STARTED(1) / STOPPED(0) */
+        uint8_t tx_queue_state[RTE_MAX_QUEUES_PER_PORT];
+        /** Queues state: STARTED(1) / STOPPED(0) */
+        uint32_t dev_flags; /**< Capabilities */
+        enum rte_kernel_driver kdrv;    /**< Kernel driver passthrough */
+        int numa_node;  /**< NUMA node connection */
+        struct rte_vlan_filter_conf vlan_filter_conf;
+        /**< VLAN filter configuration. */
+};
+
+
+/**< @internal Test if a port supports specific mempool ops */
+
+/**
+ * @internal A structure containing the functions exported by an Ethernet driver.
+ */
+struct eth_dev_ops {
+        eth_dev_configure_t        dev_configure; /**< Configure device. */
+        eth_dev_start_t            dev_start;     /**< Start device. */
+        eth_dev_stop_t             dev_stop;      /**< Stop device. */
+        eth_dev_set_link_up_t      dev_set_link_up;   /**< Device link up. */
+        eth_dev_set_link_down_t    dev_set_link_down; /**< Device link down. */
+        eth_dev_close_t            dev_close;     /**< Close device. */
+        eth_dev_reset_t            dev_reset;     /**< Reset device. */
+        eth_link_update_t          link_update;   /**< Get device link state. */
+
+        eth_promiscuous_enable_t   promiscuous_enable; /**< Promiscuous ON. */
+        eth_promiscuous_disable_t  promiscuous_disable;/**< Promiscuous OFF. */
+        eth_allmulticast_enable_t  allmulticast_enable;/**< RX multicast ON. */
+        eth_allmulticast_disable_t allmulticast_disable;/**< RX multicast OFF. */
+        eth_mac_addr_remove_t      mac_addr_remove; /**< Remove MAC address. */
+        eth_mac_addr_add_t         mac_addr_add;  /**< Add a MAC address. */
+        eth_mac_addr_set_t         mac_addr_set;  /**< Set a MAC address. */
+        eth_set_mc_addr_list_t     set_mc_addr_list; /**< set list of mcast addrs. */
+        mtu_set_t                  mtu_set;       /**< Set MTU. */
+
+        eth_stats_get_t            stats_get;     /**< Get generic device statistics. */
+        eth_stats_reset_t          stats_reset;   /**< Reset generic device statistics. */
+        eth_xstats_get_t           xstats_get;    /**< Get extended device statistics. */
+        eth_xstats_reset_t         xstats_reset;  /**< Reset extended device statistics. */
+        eth_xstats_get_names_t     xstats_get_names;
+        /**< Get names of extended statistics. */
+        eth_queue_stats_mapping_set_t queue_stats_mapping_set;
+        /**< Configure per queue stat counter mapping. */
+
+        eth_dev_infos_get_t        dev_infos_get; /**< Get device info. */
+        eth_rxq_info_get_t         rxq_info_get; /**< retrieve RX queue information. */
+        eth_txq_info_get_t         txq_info_get; /**< retrieve TX queue information. */
+        eth_fw_version_get_t       fw_version_get; /**< Get firmware version. */
+        eth_dev_supported_ptypes_get_t dev_supported_ptypes_get;
+        /**< Get packet types supported and identified by device. */
+
+        vlan_filter_set_t          vlan_filter_set; /**< Filter VLAN Setup. */
+        vlan_tpid_set_t            vlan_tpid_set; /**< Outer/Inner VLAN TPID Setup. */
+        vlan_strip_queue_set_t     vlan_strip_queue_set; /**< VLAN Stripping on queue. */
+        vlan_offload_set_t         vlan_offload_set; /**< Set VLAN Offload. */
+        vlan_pvid_set_t            vlan_pvid_set; /**< Set port based TX VLAN insertion. */
+
+        eth_queue_start_t          rx_queue_start;/**< Start RX for a queue. */
+        eth_queue_stop_t           rx_queue_stop; /**< Stop RX for a queue. */
+        eth_queue_start_t          tx_queue_start;/**< Start TX for a queue. */
+        eth_queue_stop_t           tx_queue_stop; /**< Stop TX for a queue. */
+        eth_rx_queue_setup_t       rx_queue_setup;/**< Set up device RX queue. */
+        eth_queue_release_t        rx_queue_release; /**< Release RX queue. */
+        eth_rx_queue_count_t       rx_queue_count;
+        /**< Get the number of used RX descriptors. */
+        eth_rx_descriptor_done_t   rx_descriptor_done; /**< Check rxd DD bit. */
+        eth_rx_descriptor_status_t rx_descriptor_status;
+        /**< Check the status of a Rx descriptor. */
+        eth_tx_descriptor_status_t tx_descriptor_status;
+        /**< Check the status of a Tx descriptor. */
+        eth_rx_enable_intr_t       rx_queue_intr_enable;  /**< Enable Rx queue interrupt. */
+        eth_rx_disable_intr_t      rx_queue_intr_disable; /**< Disable Rx queue interrupt. */
+        eth_tx_queue_setup_t       tx_queue_setup;/**< Set up device TX queue. */
+        eth_queue_release_t        tx_queue_release; /**< Release TX queue. */
+        eth_tx_done_cleanup_t      tx_done_cleanup;/**< Free tx ring mbufs */
+
+        eth_dev_led_on_t           dev_led_on;    /**< Turn on LED. */
+        eth_dev_led_off_t          dev_led_off;   /**< Turn off LED. */
+
+        flow_ctrl_get_t            flow_ctrl_get; /**< Get flow control. */
+        flow_ctrl_set_t            flow_ctrl_set; /**< Setup flow control. */
+        priority_flow_ctrl_set_t   priority_flow_ctrl_set; /**< Setup priority flow control. */
+
+        eth_uc_hash_table_set_t    uc_hash_table_set; /**< Set Unicast Table Array. */
+        eth_uc_all_hash_table_set_t uc_all_hash_table_set; /**< Set Unicast hash bitmap. */
+
+        eth_mirror_rule_set_t      mirror_rule_set; /**< Add a traffic mirror rule. */
+        eth_mirror_rule_reset_t    mirror_rule_reset; /**< reset a traffic mirror rule. */
+
+        eth_udp_tunnel_port_add_t  udp_tunnel_port_add; /** Add UDP tunnel port. */
+        eth_udp_tunnel_port_del_t  udp_tunnel_port_del; /** Del UDP tunnel port. */
+        eth_l2_tunnel_eth_type_conf_t l2_tunnel_eth_type_conf;
+        /** Config ether type of l2 tunnel. */
+        eth_l2_tunnel_offload_set_t   l2_tunnel_offload_set;
+        /** Enable/disable l2 tunnel offload functions. */
+
+        eth_set_queue_rate_limit_t set_queue_rate_limit; /**< Set queue rate limit. */
+
+        rss_hash_update_t          rss_hash_update; /** Configure RSS hash protocols. */
+        rss_hash_conf_get_t        rss_hash_conf_get; /** Get current RSS hash configuration. */
+        reta_update_t              reta_update;   /** Update redirection table. */
+        reta_query_t               reta_query;    /** Query redirection table. */
+
+        eth_filter_ctrl_t          filter_ctrl; /**< common filter control. */
+
+        eth_get_dcb_info           get_dcb_info; /** Get DCB information. */
+
+        eth_timesync_enable_t      timesync_enable;
+        /** Turn IEEE1588/802.1AS timestamping on. */
+        eth_timesync_disable_t     timesync_disable;
+        /** Turn IEEE1588/802.1AS timestamping off. */
+        eth_timesync_read_rx_timestamp_t timesync_read_rx_timestamp;
+        /** Read the IEEE1588/802.1AS RX timestamp. */
+        eth_timesync_read_tx_timestamp_t timesync_read_tx_timestamp;
+        /** Read the IEEE1588/802.1AS TX timestamp. */
+        eth_timesync_adjust_time   timesync_adjust_time; /** Adjust the device clock. */
+        eth_timesync_read_time     timesync_read_time; /** Get the device clock time. */
+        eth_timesync_write_time    timesync_write_time; /** Set the device clock time. */
+
+        eth_xstats_get_by_id_t     xstats_get_by_id;
+        /**< Get extended device statistic values by ID. */
+        eth_xstats_get_names_by_id_t xstats_get_names_by_id;
+        /**< Get name of extended device statistics by ID. */
+
+        eth_tm_ops_get_t tm_ops_get;
+        /**< Get Traffic Management (TM) operations. */
+        eth_pool_ops_supported_t pool_ops_supported;
+        /**< Test if a port supports specific mempool ops */
+};
+
+```
+***
+```
+==========================================================================
+Regarding the dpaa2 driver, this is the call chain below:
+
+drivers/net/dpaa2/dpaa2_ethdev.c
+
+
+static struct rte_dpaa2_driver rte_dpaa2_pmd = {
+        .drv_type = DPAA2_ETH,
+        .probe = rte_dpaa2_probe,
+        .remove = rte_dpaa2_remove,
+};
+
+rte_dpaa2_probe()
+{
+....
+ eth_dev->data->dev_private = rte_zmalloc
+....
+  /*
+   * Init the Key structure
+   * 1. rte_dpaa2_device
+   * 2. dpaa2_dev_priv
+   * 3. fsl_mc_io *dpni_dev
+   * 4. dpni_buffer_layout
+   */
+ dpaa2_dev_init()
+  dpaa2_alloc_rx_tx_queues() /* Init dpaa2_queue */
+  {
+  ....
+    struct dpaa2_queue *mc_q, *mcq;
+
+    mc_q = rte_malloc(NULL, sizeof(struct dpaa2_queue) * tot_queues,RTE_CACHE_LINE_SIZE);
+
+    for (i = 0; i < priv->nb_rx_queues; i++) {
+    ....
+      priv->rx_vq[i] = mc_q++;
+    ....
+    }
+  ....  
+  }
+....
+}  
 
 ```
 ***
