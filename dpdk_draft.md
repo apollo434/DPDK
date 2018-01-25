@@ -281,6 +281,22 @@ internal_config
 hugepage_info
 hugepage_file
 
+
+rte_config
+  rte_mem_config
+    rte_memseg      memseg[RTE_MAX_MEMSEG];
+    rte_memzone     memzone[RTE_MAX_MEMZONE];
+    malloc_heaps    malloc_heaps[RTE_MAX_NUMA_NODES];
+    rte_tailq_head  tailq_head[RTE_MAX_TAILQ];
+
+
+rte_mempool
+  rte_memzone *mz;
+  rte_mempool_cache *local_cache; /**< Per-lcore local cache */
+  rte_mempool_objhdr_list elt_list; /**< List of objects in pool */
+  rte_mempool_memhdr_list mem_list; /**< List of memory chunks */
+
+
 ```
 
 ***
@@ -787,6 +803,65 @@ struct eth_dev_ops {
 };
 
 ```
+==========================================================================
+Regarding how to init the rx_queues[], which will be used in rx progress
+
+```
+main() (examples/l3fwd-acl/main.c)
+  rte_eth_rx_queue_setup
+    dev->dev_ops->rx_queue_setup
+      ixgbe_dev_rx_queue_setup
+        dev->data->rx_queues[queue_idx] = rxq;
+
+static const struct eth_dev_ops ixgbe_eth_dev_ops = {
+....
+  .rx_queue_setup       = ixgbe_dev_rx_queue_setup,
+....
+}
+
+ixgbe_dev_rx_queue_setup()  (drivers/net/ixgbe/ixgbe_rxtx.c)
+{
+....
+  dev->data->rx_queues[queue_idx] = rxq;
+....
+}
+
+rte_eth_rx_queue_setup()
+{
+...
+  ret = (*dev->dev_ops->rx_queue_setup)(dev, rx_queue_id, nb_rx_desc,
+                                        socket_id, &local_conf, mp);
+...
+}
+
+main()  (examples/l3fwd-acl/main.c)
+{
+....
+  for (lcore_id = 0; lcore_id < RTE_MAX_LCORE; lcore_id++) {
+  ....
+    for (queue = 0; queue < qconf->n_rx_queue; ++queue) {
+    ....
+      ret = rte_eth_rx_queue_setup(portid, queueid, nb_rxd,
+                                   socketid, NULL,pktmbuf_pool[socketid]);
+    ....
+    }
+  }
+....  
+}
+
+/*
+ * One more time, this is the typical example for dpdk
+ *
+ */
+main()
+{
+  rte_eth_dev_configure()
+  rte_eth_tx_queue_setup()
+  rte_eth_rx_queue_setup()
+  rte_eth_dev_start()
+
+}
+```
 ***
 ```
 ==========================================================================
@@ -813,7 +888,9 @@ rte_dpaa2_probe()
    * 3. fsl_mc_io *dpni_dev
    * 4. dpni_buffer_layout
    */
- dpaa2_dev_init()
+dpaa2_dev_init()
+{
+....
   dpaa2_alloc_rx_tx_queues() /* Init dpaa2_queue */
   {
   ....
@@ -826,10 +903,102 @@ rte_dpaa2_probe()
       priv->rx_vq[i] = mc_q++;
     ....
     }
-  ....  
   }
 ....
+  eth_dev->dev_ops = &dpaa2_ethdev_ops;
+  eth_dev->data->dev_flags |= RTE_ETH_DEV_INTR_LSC;
+
+  eth_dev->rx_pkt_burst = dpaa2_dev_prefetch_rx;
+  eth_dev->tx_pkt_burst = dpaa2_dev_tx;
+....
 }  
+
+```
+***
+```
+==========================================================================
+Regarding local_cache:
+
+1. Create the local_cache
+
+rte_mempool_create_empty()  (lib/librte_mempool/rte_mempool.c)
+{
+....
+  mp->local_cache = (struct rte_mempool_cache *)RTE_PTR_ADD(mp, MEMPOOL_HEADER_SIZE(mp, 0));
+....
+}
+
+2. How to get/put local_cache
+
+static __rte_always_inline struct rte_mempool_cache *
+rte_mempool_default_cache(struct rte_mempool *mp, unsigned lcore_id)
+{
+        if (mp->cache_size == 0)
+                return NULL;
+
+        if (lcore_id >= RTE_MAX_LCORE)
+                return NULL;
+
+        return &mp->local_cache[lcore_id];
+}
+
+
+rte_mempool_put_bulk()   (lib/librte_mempool/rte_mempool.h)
+{
+        struct rte_mempool_cache *cache;
+        cache = rte_mempool_default_cache(mp, rte_lcore_id());
+        rte_mempool_generic_put(mp, obj_table, n, cache);
+}
+
+static __rte_always_inline int
+rte_mempool_get_bulk(struct rte_mempool *mp, void **obj_table, unsigned int n)
+{
+        struct rte_mempool_cache *cache;
+        cache = rte_mempool_default_cache(mp, rte_lcore_id());
+        return rte_mempool_generic_get(mp, obj_table, n, cache);
+}
+
+3. How to use local_cache, and when do we use this features, take ixgbe as an example
+
+1) How to Init
+------------------------------------------------------------------------
+drivers/net/ixgbe/ixgbe_ethdev.c
+
+static const struct eth_dev_ops ixgbe_eth_dev_ops = {
+....
+        .dev_start            = ixgbe_dev_start,
+....
+}
+
+drivers/net/ixgbe/ixgbe_rxtx.c
+
+ixgbe_dev_start
+  ixgbe_dev_rx_init
+    ixgbe_set_rx_function
+
+ixgbe_set_rx_function()
+{
+....
+  dev->rx_pkt_burst = ixgbe_recv_pkts
+....  
+}
+
+2) How to receive packets via local cache or ring
+-------------------------------------------------------------------------
+dev->rx_pkt_burst
+  ixgbe_recv_pkts
+    rte_mbuf_raw_alloc() (lib/librte_mbuf/rte_mbuf.h)
+      rte_mempool_get
+
+
+
+
+
+rte_mempool_get()  (lib/librte_mempool/rte_mempool.h)
+  rte_mempool_get_bulk
+    rte_mempool_default_cache  /* allocate memeory from local cache */
+    rte_mempool_generic_get    /* allocate memory from ring */
+-------------------------------------------------------------------------
 
 ```
 ***
