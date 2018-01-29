@@ -803,10 +803,13 @@ struct eth_dev_ops {
 };
 
 ```
-==========================================================================
-Regarding how to init the rx_queues[], which will be used in rx progress
+
 
 ```
+***
+Regarding how to init the rx_queues[], which will be used in rx progress
+
+
 main() (examples/l3fwd-acl/main.c)
   rte_eth_rx_queue_setup
     dev->dev_ops->rx_queue_setup
@@ -861,10 +864,12 @@ main()
   rte_eth_dev_start()
 
 }
+
+
+```
+
 ```
 ***
-```
-==========================================================================
 Regarding the dpaa2 driver, this is the call chain below:
 
 drivers/net/dpaa2/dpaa2_ethdev.c
@@ -914,9 +919,9 @@ dpaa2_dev_init()
 }  
 
 ```
-***
+
 ```
-==========================================================================
+***
 Regarding local_cache:
 
 1. Create the local_cache
@@ -999,6 +1004,78 @@ rte_mempool_get()  (lib/librte_mempool/rte_mempool.h)
     rte_mempool_default_cache  /* allocate memeory from local cache */
     rte_mempool_generic_get    /* allocate memory from ring */
 -------------------------------------------------------------------------
+
+```
+
+***
+```
+***
+Regarding how to mmap dpaa/dpaa2 memory space, please check the function below:
+
+Go through the c code, the relevent io memory space is get via "ioctl", so does it mean the kernel space dpaa/dpaa2 driver must be Init at a head of time?
+
+(drivers/bus/fslmc/fslmc_vfio.c)
+static int64_t vfio_map_mcp_obj(struct fslmc_vfio_group *group, char *mcp_obj)
+{
+....
+        /* getting the mcp object's fd*/
+        mc_fd = ioctl(group->fd, VFIO_GROUP_GET_DEVICE_FD, mcp_obj);
+        if (mc_fd < 0) {
+                FSLMC_VFIO_LOG(ERR, "error in VFIO get dev %s fd from group %d",
+                               mcp_obj, group->fd);
+                return v_addr;
+        }
+
+        /* getting device info*/
+        ret = ioctl(mc_fd, VFIO_DEVICE_GET_INFO, &d_info);
+        if (ret < 0) {
+                FSLMC_VFIO_LOG(ERR, "error in VFIO getting DEVICE_INFO");
+                goto MC_FAILURE;
+        }
+
+        /* getting device region info*/
+        ret = ioctl(mc_fd, VFIO_DEVICE_GET_REGION_INFO, &reg_info);
+        if (ret < 0) {
+                FSLMC_VFIO_LOG(ERR, "error in VFIO getting REGION_INFO");
+                goto MC_FAILURE;
+        }
+
+....
+        v_addr = (uint64_t)mmap(NULL, reg_info.size,
+                PROT_WRITE | PROT_READ, MAP_SHARED,
+                mc_fd, reg_info.offset);
+....
+}
+
+fslmc_process_mcp()   (drivers/bus/fslmc/fslmc_vfio.c)
+{
+....
+  v_addr = vfio_map_mcp_obj(&vfio_group, dev_name);
+....
+  rte_mcp_ptr_list[0] = (void *)v_addr;
+....
+}
+
+The dpaa/dpaa2 memory space information saved in global variable "rte_mcp_ptr_list"
+
+-------------------------------------------------------------------------
+This is the call chain about the dpaa2 mc io sapce mmap to user space
+
+rte_fslmc_probe
+  fslmc_vfio_process_group
+    fslmc_process_mcp
+      vfio_map_mcp_obj
+        mmap
+
+struct rte_fslmc_bus rte_fslmc_bus = {
+        .bus = {
+                .scan = rte_fslmc_scan,
+                .probe = rte_fslmc_probe,
+                .find_device = rte_fslmc_find_device,
+        },
+        .device_list = TAILQ_HEAD_INITIALIZER(rte_fslmc_bus.device_list),
+        .driver_list = TAILQ_HEAD_INITIALIZER(rte_fslmc_bus.driver_list),
+};
 
 ```
 ***
