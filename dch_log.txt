@@ -1,0 +1,1870 @@
+
+wr8@pek-gwang2-d2:~/workspace$ ssh root@128.224.155.26
+root@128.224.155.26's password:
+root@c0101:~# ls
+anaconda-ks.cfg  auto_lic     boot.log     host.lic  new_sys       parallel_studio_xe_2017_update1    reproduce_shaohua  wgh
+anaconda_log     autorun.bin  check_lic  install   new_sys.tar.gz  parallel_studio_xe_2017_update1.tgz    study
+root@c0101:~# cd wgh/
+root@c0101:~/wgh# ls
+Ex2_emt1_C  Ex2_emt1_C.tar.bz2    opal  usr-src-kernel.tgz
+root@c0101:~/wgh# ll
+total 26792
+drwx------  4 root root     4096 Nov  5 19:29 .
+drwxr-xr-x 11 root root     4096 Dec  2 20:52 ..
+drwx------  2 root root     4096 Nov  6 01:16 Ex2_emt1_C
+-rwx------  1 root root  6879717 Nov  5 19:29 Ex2_emt1_C.tar.bz2
+drwxrwxr-x  4 root root     4096 Nov  5 19:29 opal
+-rw-r--r--  1 root root 20534032 Nov  5 19:29 usr-src-kernel.tgz
+root@c0101:~/wgh# cd opal/
+root@c0101:~/wgh/opal# ls
+base_test  lib_opal
+root@c0101:~/wgh/opal# cd lib_opal/
+root@c0101:~/wgh/opal/lib_opal# ls
+Makefile  module  module.tar.gz  opal_common.c    opal_common.h  opal_ethdev.c  opal_hw.c  opal_hw.h  opal_main.c  opal_mem.c  opal_pci.h  opal_regs.h
+root@c0101:~/wgh/opal/lib_opal# cd module
+root@c0101:~/wgh/opal/lib_opal/module# ls
+Makefile  compat.h  igb_uio.c  igb_uio.c~
+root@c0101:~/wgh/opal/lib_opal/module# vi Makefile
+root@c0101:~/wgh/opal/lib_opal/module#
+root@c0101:~/wgh/opal/lib_opal/module#
+root@c0101:~/wgh/opal/lib_opal/module#
+root@c0101:~/wgh/opal/lib_opal/module# cd
+root@c0101:~# cd /opt/
+root@c0101:/opt# ls
+WindRiver  dpdk  intel
+root@c0101:/opt# cd dpdk/
+root@c0101:/opt/dpdk# ls
+app  examples  mk  scripts  tools  x86_64-native-linuxapp-gcc  x86_64-native-linuxapp-gcc.bak
+root@c0101:/opt/dpdk# cd x86_64-native-linuxapp-gc^C
+root@c0101:/opt/dpdk# cs tools/
+-sh: cs: command not found
+root@c0101:/opt/dpdk# ls
+app  examples  mk  scripts  tools  x86_64-native-linuxapp-gcc  x86_64-native-linuxapp-gcc.bak
+root@c0101:/opt/dpdk# cd tools/
+root@c0101:/opt/dpdk/tools# ls
+cpu_layout.py  dpdk_nic_bind.py  setup.sh
+root@c0101:/opt/dpdk/tools# vi dpdk_nic_bind.py
+root@c0101:/opt/dpdk/tools# ./dpdk_nic_bind.py -b status
+Warning - no supported modules(DPDK driver) are loaded
+Error: No devices specified.
+Run './dpdk_nic_bind.py --usage' for further information
+root@c0101:/opt/dpdk/tools# ./dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+<none>
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused= *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=
+0000:07:00.1 '82576 Gigabit Network Connection' if=eth3 drv=igb unused=
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=
+root@c0101:/opt/dpdk/tools# cd /sys/pci/bus
+-sh: cd: /sys/pci/bus: No such file or directory
+root@c0101:/opt/dpdk/tools# cd /sys/bus/pci
+root@c0101:/sys/bus/pci# ls
+devices  drivers  drivers_autoprobe  drivers_probe  rescan  resource_alignment    slots  uevent
+root@c0101:/sys/bus/pci# cd devices/
+root@c0101:/sys/bus/pci/devices# cd 0000\:07\:00.0
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# ls
+broken_parity_status  consistent_dma_mask_bits    dma_mask_bits  irq          modalias    net       ptp       reset      resource1  rom         subsystem       uevent
+class              d3cold_allowed        driver           local_cpulist  msi_bus    numa_node  remove  resource   resource2  sriov_numvfs     subsystem_device  vendor
+config              device            enable           local_cpus     msi_irqs    power       rescan  resource0  resource3  sriov_totalvfs  subsystem_vendor
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1836544 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107057 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151835986 (144.8 MiB)  TX bytes:11587022 (11.0 MiB)
+          Memory:dfd20000-dfd3ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1836563 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107066 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151837406 (144.8 MiB)  TX bytes:11589104 (11.0 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+eth2      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7e 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df9a0000-df9bffff
+
+eth3      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7f 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df940000-df95ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# ls
+broken_parity_status  consistent_dma_mask_bits    dma_mask_bits  irq          modalias    net       ptp       reset      resource1  rom         subsystem       uevent
+class              d3cold_allowed        driver           local_cpulist  msi_bus    numa_node  remove  resource   resource2  sriov_numvfs     subsystem_device  vendor
+config              device            enable           local_cpus     msi_irqs    power       rescan  resource0  resource3  sriov_totalvfs  subsystem_vendor
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# ll
+total 0
+drwxr-xr-x 6 root root      0 Dec  2 22:54 .
+drwxr-xr-x 8 root root      0 Dec  2 22:54 ..
+-rw-r--r-- 1 root root   4096 Dec 14 00:10 broken_parity_status
+-r--r--r-- 1 root root   4096 Dec  2 22:54 class
+-rw-r--r-- 1 root root   4096 Dec  2 22:54 config
+-r--r--r-- 1 root root   4096 Dec 14 00:10 consistent_dma_mask_bits
+-rw-r--r-- 1 root root   4096 Dec 14 00:10 d3cold_allowed
+-r--r--r-- 1 root root   4096 Dec  2 22:54 device
+-r--r--r-- 1 root root   4096 Dec 14 00:10 dma_mask_bits
+lrwxrwxrwx 1 root root      0 Dec  2 22:54 driver -> ../../../../bus/pci/drivers/igb
+-rw-r--r-- 1 root root   4096 Dec 14 00:10 enable
+-r--r--r-- 1 root root   4096 Dec  2 22:54 irq
+-r--r--r-- 1 root root   4096 Dec 14 00:10 local_cpulist
+-r--r--r-- 1 root root   4096 Dec 14 00:10 local_cpus
+-r--r--r-- 1 root root   4096 Dec 14 00:09 modalias
+-rw-r--r-- 1 root root   4096 Dec 14 00:10 msi_bus
+drwxr-xr-x 2 root root      0 Dec 14 00:10 msi_irqs
+drwxr-xr-x 3 root root      0 Dec  2 22:54 net
+-r--r--r-- 1 root root   4096 Dec 14 00:10 numa_node
+drwxr-xr-x 2 root root      0 Dec 14 00:10 power
+drwxr-xr-x 3 root root      0 Dec  2 22:54 ptp
+--w--w---- 1 root root   4096 Dec 14 00:10 remove
+--w--w---- 1 root root   4096 Dec 14 00:10 rescan
+--w------- 1 root root   4096 Dec 14 00:10 reset
+-r--r--r-- 1 root root   4096 Dec  2 22:54 resource
+-rw------- 1 root root 131072 Dec 14 00:10 resource0
+-rw------- 1 root root 131072 Dec 14 00:10 resource1
+-rw------- 1 root root     32 Dec 14 00:10 resource2
+-rw------- 1 root root  16384 Dec 14 00:10 resource3
+-rw------- 1 root root 131072 Dec 14 00:10 rom
+-rw-rw-r-- 1 root root   4096 Dec 14 00:10 sriov_numvfs
+-r--r--r-- 1 root root   4096 Dec 14 00:10 sriov_totalvfs
+lrwxrwxrwx 1 root root      0 Dec  2 22:54 subsystem -> ../../../../bus/pci
+-r--r--r-- 1 root root   4096 Dec 14 00:10 subsystem_device
+-r--r--r-- 1 root root   4096 Dec 14 00:10 subsystem_vendor
+-rw-r--r-- 1 root root   4096 Dec  2 22:54 uevent
+-r--r--r-- 1 root root   4096 Dec  2 22:54 vendor
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# cat device
+0x10c9
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# cd driver
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ls
+0000:04:00.0  0000:04:00.1  0000:07:00.0  0000:07:00.1    bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ls -l
+total 0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w------- 1 root root 4096 Dec 14 00:10 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w------- 1 root root 4096 Dec 14 00:10 new_id
+--w------- 1 root root 4096 Dec 14 00:10 remove_id
+--w------- 1 root root 4096 Dec  2 22:54 uevent
+--w------- 1 root root 4096 Dec 14 00:10 unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# cat bind
+cat: bind: Permission denied
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1836760 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107152 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151853444 (144.8 MiB)  TX bytes:11606172 (11.0 MiB)
+          Memory:dfd20000-dfd3ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1836775 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107161 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151854807 (144.8 MiB)  TX bytes:11608238 (11.0 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+eth2      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7e 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df9a0000-df9bffff
+
+eth3      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7f 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df940000-df95ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 1 > unbind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ls -l
+total 0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w------- 1 root root 4096 Dec 14 00:10 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w------- 1 root root 4096 Dec 14 00:10 new_id
+--w------- 1 root root 4096 Dec 14 00:10 remove_id
+--w------- 1 root root 4096 Dec  2 22:54 uevent
+--w------- 1 root root 4096 Dec 14 00:11 unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1836869 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107199 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151862533 (144.8 MiB)  TX bytes:11616410 (11.0 MiB)
+          Memory:dfd20000-dfd3ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1836885 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107208 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151863773 (144.8 MiB)  TX bytes:11618492 (11.0 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+eth2      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7e 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df9a0000-df9bffff
+
+eth3      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7f 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df940000-df95ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ls -l
+total 0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w------- 1 root root 4096 Dec 14 00:10 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w------- 1 root root 4096 Dec 14 00:10 new_id
+--w------- 1 root root 4096 Dec 14 00:10 remove_id
+--w------- 1 root root 4096 Dec  2 22:54 uevent
+--w------- 1 root root 4096 Dec 14 00:11 unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 1 > bind  
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 1 > unbind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# cd ..
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# ll
+total 0
+drwxr-xr-x 6 root root      0 Dec  2 22:54 .
+drwxr-xr-x 8 root root      0 Dec  2 22:54 ..
+-rw-r--r-- 1 root root   4096 Dec 14 00:10 broken_parity_status
+-r--r--r-- 1 root root   4096 Dec  2 22:54 class
+-rw-r--r-- 1 root root   4096 Dec  2 22:54 config
+-r--r--r-- 1 root root   4096 Dec 14 00:10 consistent_dma_mask_bits
+-rw-r--r-- 1 root root   4096 Dec 14 00:10 d3cold_allowed
+-r--r--r-- 1 root root   4096 Dec  2 22:54 device
+-r--r--r-- 1 root root   4096 Dec 14 00:10 dma_mask_bits
+lrwxrwxrwx 1 root root      0 Dec  2 22:54 driver -> ../../../../bus/pci/drivers/igb
+-rw-r--r-- 1 root root   4096 Dec 14 00:10 enable
+-r--r--r-- 1 root root   4096 Dec  2 22:54 irq
+-r--r--r-- 1 root root   4096 Dec 14 00:10 local_cpulist
+-r--r--r-- 1 root root   4096 Dec 14 00:10 local_cpus
+-r--r--r-- 1 root root   4096 Dec 14 00:09 modalias
+-rw-r--r-- 1 root root   4096 Dec 14 00:10 msi_bus
+drwxr-xr-x 2 root root      0 Dec 14 00:10 msi_irqs
+drwxr-xr-x 3 root root      0 Dec  2 22:54 net
+-r--r--r-- 1 root root   4096 Dec 14 00:10 numa_node
+drwxr-xr-x 2 root root      0 Dec 14 00:10 power
+drwxr-xr-x 3 root root      0 Dec  2 22:54 ptp
+--w--w---- 1 root root   4096 Dec 14 00:10 remove
+--w--w---- 1 root root   4096 Dec 14 00:10 rescan
+--w------- 1 root root   4096 Dec 14 00:10 reset
+-r--r--r-- 1 root root   4096 Dec  2 22:54 resource
+-rw------- 1 root root 131072 Dec 14 00:10 resource0
+-rw------- 1 root root 131072 Dec 14 00:10 resource1
+-rw------- 1 root root     32 Dec 14 00:10 resource2
+-rw------- 1 root root  16384 Dec 14 00:10 resource3
+-rw------- 1 root root 131072 Dec 14 00:10 rom
+-rw-rw-r-- 1 root root   4096 Dec 14 00:10 sriov_numvfs
+-r--r--r-- 1 root root   4096 Dec 14 00:10 sriov_totalvfs
+lrwxrwxrwx 1 root root      0 Dec  2 22:54 subsystem -> ../../../../bus/pci
+-r--r--r-- 1 root root   4096 Dec 14 00:10 subsystem_device
+-r--r--r-- 1 root root   4096 Dec 14 00:10 subsystem_vendor
+-rw-r--r-- 1 root root   4096 Dec  2 22:54 uevent
+-r--r--r-- 1 root root   4096 Dec  2 22:54 vendor
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# cd driver
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ls -l
+total 0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w------- 1 root root 4096 Dec 14 00:12 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w------- 1 root root 4096 Dec 14 00:10 new_id
+--w------- 1 root root 4096 Dec 14 00:10 remove_id
+--w------- 1 root root 4096 Dec  2 22:54 uevent
+--w------- 1 root root 4096 Dec 14 00:12 unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 0000:07:00.0 > unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1837302 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107363 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151902957 (144.8 MiB)  TX bytes:11643385 (11.1 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+eth3      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7f 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df940000-df95ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 0000:07:00.1 > unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1837416 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107395 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151912829 (144.8 MiB)  TX bytes:11649273 (11.1 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ls -l
+total 0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+--w------- 1 root root 4096 Dec 14 00:12 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w------- 1 root root 4096 Dec 14 00:10 new_id
+--w------- 1 root root 4096 Dec 14 00:10 remove_id
+--w------- 1 root root 4096 Dec  2 22:54 uevent
+--w------- 1 root root 4096 Dec 14 00:14 unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 0000:04:00.1 > unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1837545 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107439 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151923952 (144.8 MiB)  TX bytes:11656709 (11.1 MiB)
+          Memory:dfd20000-dfd3ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 0000:04:00.1 > bind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1837653 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107466 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151933496 (144.8 MiB)  TX bytes:11661187 (11.1 MiB)
+          Memory:dfd20000-dfd3ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1837669 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107475 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151934800 (144.8 MiB)  TX bytes:11663161 (11.1 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 0000:07:00.0 > bind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# echo 0000:07:00.1 > bind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1837817 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:107543 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:151948315 (144.9 MiB)  TX bytes:11672672 (11.1 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+eth2      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7e 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df9a0000-df9bffff
+
+eth3      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7f 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df940000-df95ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 43 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:14 unbind
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# cd..
+-sh: cd..: command not found
+root@c0101:/sys/bus/pci/devices/0000:07:00.0/driver# cd ..
+root@c0101:/sys/bus/pci/devices/0000:07:00.0# cd ..
+root@c0101:/sys/bus/pci/devices# cd ..
+root@c0101:/sys/bus/pci# cd ..
+root@c0101:/sys/bus# cd -
+/sys/bus/pci
+root@c0101:/sys/bus/pci# ls
+devices  drivers  drivers_autoprobe  drivers_probe  rescan  resource_alignment    slots  uevent
+root@c0101:/sys/bus/pci# cd drivers
+root@c0101:/sys/bus/pci/drivers# ls
+agpgart-intel  dw_dmac_pci  e1000e        i801_smbus  ioatdma      ixgb       megaraid        mlx4_core  mpt3sas    mptspi      pwm-lpss      sdhci-pci    tg3        vmxnet3
+ahci           e100        ehci-pci        i915        iosf_mbi_pci  ixgbe    megaraid_legacy  mlx5_core  mptfc    ohci-pci  pxa2xx_spi_pci  serial    uhci_hcd    xhci_hcd
+ata_piix       e1000        i2c-designware-pci    igb        isci      lpc_ich  megaraid_sas     mpt2sas    mptsas    pcieport  r8168          snbep_uncore    vmw_pvscsi
+root@c0101:/sys/bus/pci/drivers# ls -l
+total 0
+drwxr-xr-x 2 root root 0 Dec  2 22:54 agpgart-intel
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ahci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ata_piix
+drwxr-xr-x 2 root root 0 Dec  2 22:54 dw_dmac_pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 e100
+drwxr-xr-x 2 root root 0 Dec  2 22:54 e1000
+drwxr-xr-x 2 root root 0 Dec  2 22:54 e1000e
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ehci-pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 i2c-designware-pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 i801_smbus
+drwxr-xr-x 2 root root 0 Dec  2 22:54 i915
+drwxr-xr-x 2 root root 0 Dec  2 22:54 igb
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ioatdma
+drwxr-xr-x 2 root root 0 Dec  2 22:54 iosf_mbi_pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 isci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ixgb
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ixgbe
+drwxr-xr-x 2 root root 0 Dec  2 22:54 lpc_ich
+drwxr-xr-x 2 root root 0 Dec  2 22:54 megaraid
+drwxr-xr-x 2 root root 0 Dec  2 22:54 megaraid_legacy
+drwxr-xr-x 2 root root 0 Dec  2 22:54 megaraid_sas
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mlx4_core
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mlx5_core
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mpt2sas
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mpt3sas
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mptfc
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mptsas
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mptspi
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ohci-pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 pcieport
+drwxr-xr-x 2 root root 0 Dec  2 22:54 pwm-lpss
+drwxr-xr-x 2 root root 0 Dec  2 22:54 pxa2xx_spi_pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 r8168
+drwxr-xr-x 2 root root 0 Dec  2 22:54 sdhci-pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 serial
+drwxr-xr-x 2 root root 0 Dec  2 22:54 snbep_uncore
+drwxr-xr-x 2 root root 0 Dec  2 22:54 tg3
+drwxr-xr-x 2 root root 0 Dec  2 22:54 uhci_hcd
+drwxr-xr-x 2 root root 0 Dec  2 22:54 vmw_pvscsi
+drwxr-xr-x 2 root root 0 Dec  2 22:54 vmxnet3
+drwxr-xr-x 2 root root 0 Dec  2 22:54 xhci_hcd
+root@c0101:/sys/bus/pci/drivers# cd igb/
+root@c0101:/sys/bus/pci/drivers/igb# ls
+0000:04:00.0  0000:04:00.1  0000:07:00.0  0000:07:00.1    bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb# ls -l
+total 0
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:15 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx 1 root root    0 Dec 14 00:15 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+lrwxrwxrwx 1 root root    0 Dec 14 00:15 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w------- 1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w------- 1 root root 4096 Dec 14 00:10 new_id
+--w------- 1 root root 4096 Dec 14 00:10 remove_id
+--w------- 1 root root 4096 Dec  2 22:54 uevent
+--w------- 1 root root 4096 Dec 14 00:14 unbind
+root@c0101:/sys/bus/pci/drivers/igb# cd ..
+root@c0101:/sys/bus/pci/drivers# ll
+total 0
+drwxr-xr-x 43 root root 0 Dec  2 22:54 .
+drwxr-xr-x  5 root root 0 Dec  2 22:54 ..
+drwxr-xr-x  2 root root 0 Dec  2 22:54 agpgart-intel
+drwxr-xr-x  2 root root 0 Dec  2 22:54 ahci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 ata_piix
+drwxr-xr-x  2 root root 0 Dec  2 22:54 dw_dmac_pci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 e100
+drwxr-xr-x  2 root root 0 Dec  2 22:54 e1000
+drwxr-xr-x  2 root root 0 Dec  2 22:54 e1000e
+drwxr-xr-x  2 root root 0 Dec  2 22:54 ehci-pci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 i2c-designware-pci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 i801_smbus
+drwxr-xr-x  2 root root 0 Dec  2 22:54 i915
+drwxr-xr-x  2 root root 0 Dec  2 22:54 igb
+drwxr-xr-x  2 root root 0 Dec  2 22:54 ioatdma
+drwxr-xr-x  2 root root 0 Dec  2 22:54 iosf_mbi_pci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 isci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 ixgb
+drwxr-xr-x  2 root root 0 Dec  2 22:54 ixgbe
+drwxr-xr-x  2 root root 0 Dec  2 22:54 lpc_ich
+drwxr-xr-x  2 root root 0 Dec  2 22:54 megaraid
+drwxr-xr-x  2 root root 0 Dec  2 22:54 megaraid_legacy
+drwxr-xr-x  2 root root 0 Dec  2 22:54 megaraid_sas
+drwxr-xr-x  2 root root 0 Dec  2 22:54 mlx4_core
+drwxr-xr-x  2 root root 0 Dec  2 22:54 mlx5_core
+drwxr-xr-x  2 root root 0 Dec  2 22:54 mpt2sas
+drwxr-xr-x  2 root root 0 Dec  2 22:54 mpt3sas
+drwxr-xr-x  2 root root 0 Dec  2 22:54 mptfc
+drwxr-xr-x  2 root root 0 Dec  2 22:54 mptsas
+drwxr-xr-x  2 root root 0 Dec  2 22:54 mptspi
+drwxr-xr-x  2 root root 0 Dec  2 22:54 ohci-pci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 pcieport
+drwxr-xr-x  2 root root 0 Dec  2 22:54 pwm-lpss
+drwxr-xr-x  2 root root 0 Dec  2 22:54 pxa2xx_spi_pci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 r8168
+drwxr-xr-x  2 root root 0 Dec  2 22:54 sdhci-pci
+drwxr-xr-x  2 root root 0 Dec  2 22:54 serial
+drwxr-xr-x  2 root root 0 Dec  2 22:54 snbep_uncore
+drwxr-xr-x  2 root root 0 Dec  2 22:54 tg3
+drwxr-xr-x  2 root root 0 Dec  2 22:54 uhci_hcd
+drwxr-xr-x  2 root root 0 Dec  2 22:54 vmw_pvscsi
+drwxr-xr-x  2 root root 0 Dec  2 22:54 vmxnet3
+drwxr-xr-x  2 root root 0 Dec  2 22:54 xhci_hcd
+root@c0101:/sys/bus/pci/drivers# modprobe igb_uio
+root@c0101:/sys/bus/pci/drivers# ls -l          
+total 0
+drwxr-xr-x 2 root root 0 Dec  2 22:54 agpgart-intel
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ahci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ata_piix
+drwxr-xr-x 2 root root 0 Dec  2 22:54 dw_dmac_pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 e100
+drwxr-xr-x 2 root root 0 Dec  2 22:54 e1000
+drwxr-xr-x 2 root root 0 Dec  2 22:54 e1000e
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ehci-pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 i2c-designware-pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 i801_smbus
+drwxr-xr-x 2 root root 0 Dec  2 22:54 i915
+drwxr-xr-x 2 root root 0 Dec  2 22:54 igb
+drwxr-xr-x 2 root root 0 Dec 14 00:16 igb_uio
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ioatdma
+drwxr-xr-x 2 root root 0 Dec  2 22:54 iosf_mbi_pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 isci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ixgb
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ixgbe
+drwxr-xr-x 2 root root 0 Dec  2 22:54 lpc_ich
+drwxr-xr-x 2 root root 0 Dec  2 22:54 megaraid
+drwxr-xr-x 2 root root 0 Dec  2 22:54 megaraid_legacy
+drwxr-xr-x 2 root root 0 Dec  2 22:54 megaraid_sas
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mlx4_core
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mlx5_core
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mpt2sas
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mpt3sas
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mptfc
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mptsas
+drwxr-xr-x 2 root root 0 Dec  2 22:54 mptspi
+drwxr-xr-x 2 root root 0 Dec  2 22:54 ohci-pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 pcieport
+drwxr-xr-x 2 root root 0 Dec  2 22:54 pwm-lpss
+drwxr-xr-x 2 root root 0 Dec  2 22:54 pxa2xx_spi_pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 r8168
+drwxr-xr-x 2 root root 0 Dec  2 22:54 sdhci-pci
+drwxr-xr-x 2 root root 0 Dec  2 22:54 serial
+drwxr-xr-x 2 root root 0 Dec  2 22:54 snbep_uncore
+drwxr-xr-x 2 root root 0 Dec  2 22:54 tg3
+drwxr-xr-x 2 root root 0 Dec  2 22:54 uhci_hcd
+drwxr-xr-x 2 root root 0 Dec  2 22:54 vmw_pvscsi
+drwxr-xr-x 2 root root 0 Dec  2 22:54 vmxnet3
+drwxr-xr-x 2 root root 0 Dec  2 22:54 xhci_hcd
+root@c0101:/sys/bus/pci/drivers# cd igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls
+bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls -l
+total 0
+--w------- 1 root root 4096 Dec 14 00:17 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w------- 1 root root 4096 Dec 14 00:17 new_id
+--w------- 1 root root 4096 Dec 14 00:17 remove_id
+--w------- 1 root root 4096 Dec 14 00:16 uevent
+--w------- 1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# cd ..
+root@c0101:/sys/bus/pci/drivers# cd igb
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:14 unbind
+root@c0101:/sys/bus/pci/drivers/igb# echo 0000:07:00.1 > unbind
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb# cd ..
+root@c0101:/sys/bus/pci/drivers# cd igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls
+bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls -l
+total 0
+--w------- 1 root root 4096 Dec 14 00:17 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w------- 1 root root 4096 Dec 14 00:17 new_id
+--w------- 1 root root 4096 Dec 14 00:17 remove_id
+--w------- 1 root root 4096 Dec 14 00:16 uevent
+--w------- 1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > bind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls -l
+total 0
+--w------- 1 root root 4096 Dec 14 00:17 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w------- 1 root root 4096 Dec 14 00:17 new_id
+--w------- 1 root root 4096 Dec 14 00:17 remove_id
+--w------- 1 root root 4096 Dec 14 00:16 uevent
+--w------- 1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > bind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+<none>
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:07:00.1 '82576 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > bind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.0 > bind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+<none>
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:07:00.1 '82576 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+<none>
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:07:00.1 '82576 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls -l
+total 0
+--w------- 1 root root 4096 Dec 14 00:19 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w------- 1 root root 4096 Dec 14 00:17 new_id
+--w------- 1 root root 4096 Dec 14 00:17 remove_id
+--w------- 1 root root 4096 Dec 14 00:16 uevent
+--w------- 1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > bind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# cat new_id
+cat: new_id: Permission denied
+root@c0101:/sys/bus/pci/drivers/igb_uio# lspci -nn | grep 82576
+07:00.0 Ethernet controller [0200]: Intel Corporation 82576 Gigabit Network Connection [8086:10c9] (rev 01)
+07:00.1 Ethernet controller [0200]: Intel Corporation 82576 Gigabit Network Connection [8086:10c9] (rev 01)
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 8086:10c9 0000:07:00.1 > bin
+-sh: bin: Permission denied
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 8086:10c9 0000:07:00.1 > bind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# vi /opt/dpdk/tools/dpdk_nic_bind.py
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:24 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:17 new_id
+--w-------  1 root root 4096 Dec 14 00:17 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# lspci -nn
+00:00.0 Host bridge [0600]: Intel Corporation Xeon E5/Core i7 DMI2 [8086:3c00] (rev 07)
+00:01.0 PCI bridge [0604]: Intel Corporation Xeon E5/Core i7 IIO PCI Express Root Port 1a [8086:3c02] (rev 07)
+00:01.1 PCI bridge [0604]: Intel Corporation Xeon E5/Core i7 IIO PCI Express Root Port 1b [8086:3c03] (rev 07)
+00:02.0 PCI bridge [0604]: Intel Corporation Xeon E5/Core i7 IIO PCI Express Root Port 2a [8086:3c04] (rev 07)
+00:03.0 PCI bridge [0604]: Intel Corporation Xeon E5/Core i7 IIO PCI Express Root Port 3a in PCI Express Mode [8086:3c08] (rev 07)
+00:03.2 PCI bridge [0604]: Intel Corporation Xeon E5/Core i7 IIO PCI Express Root Port 3c [8086:3c0a] (rev 07)
+00:04.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 0 [8086:3c20] (rev 07)
+00:04.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 1 [8086:3c21] (rev 07)
+00:04.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 2 [8086:3c22] (rev 07)
+00:04.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 3 [8086:3c23] (rev 07)
+00:04.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 4 [8086:3c24] (rev 07)
+00:04.5 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 5 [8086:3c25] (rev 07)
+00:04.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 6 [8086:3c26] (rev 07)
+00:04.7 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 7 [8086:3c27] (rev 07)
+00:05.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Address Map, VTd_Misc, System Management [8086:3c28] (rev 07)
+00:05.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Control Status and Global Errors [8086:3c2a] (rev 07)
+00:05.4 PIC [0800]: Intel Corporation Xeon E5/Core i7 I/O APIC [8086:3c2c] (rev 07)
+00:16.0 Communication controller [0780]: Intel Corporation C600/X79 series chipset MEI Controller #1 [8086:1d3a] (rev 05)
+00:16.1 Communication controller [0780]: Intel Corporation C600/X79 series chipset MEI Controller #2 [8086:1d3b] (rev 05)
+00:1a.0 USB controller [0c03]: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller #2 [8086:1d2d] (rev 06)
+00:1d.0 USB controller [0c03]: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller #1 [8086:1d26] (rev 06)
+00:1e.0 PCI bridge [0604]: Intel Corporation 82801 PCI Bridge [8086:244e] (rev a6)
+00:1f.0 ISA bridge [0601]: Intel Corporation C600/X79 series chipset LPC Controller [8086:1d41] (rev 06)
+00:1f.2 SATA controller [0106]: Intel Corporation C600/X79 series chipset 6-Port SATA AHCI Controller [8086:1d02] (rev 06)
+00:1f.3 SMBus [0c05]: Intel Corporation C600/X79 series chipset SMBus Host Controller [8086:1d22] (rev 06)
+01:00.0 PCI bridge [0604]: Intel Corporation C608/C606/X79 series chipset PCI Express Upstream Port [8086:1d74] (rev 06)
+02:08.0 PCI bridge [0604]: Intel Corporation C608/C606/X79 series chipset PCI Express Virtual Switch Port [8086:1d3f] (rev 06)
+03:00.0 Serial Attached SCSI controller [0107]: Intel Corporation C606 chipset Dual 4-Port SATA/SAS Storage Control Unit [8086:1d68] (rev 06)
+04:00.0 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+04:00.1 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+07:00.0 Ethernet controller [0200]: Intel Corporation 82576 Gigabit Network Connection [8086:10c9] (rev 01)
+07:00.1 Ethernet controller [0200]: Intel Corporation 82576 Gigabit Network Connection [8086:10c9] (rev 01)
+0a:03.0 VGA compatible controller [0300]: Matrox Electronics Systems Ltd. MGA G200eW WPCM450 [102b:0532] (rev 0a)
+7f:08.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link 0 [8086:3c80] (rev 07)
+7f:08.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link Reut 0 [8086:3c83] (rev 07)
+7f:08.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link Reut 0 [8086:3c84] (rev 07)
+7f:09.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link 1 [8086:3c90] (rev 07)
+7f:09.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link Reut 1 [8086:3c93] (rev 07)
+7f:09.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link Reut 1 [8086:3c94] (rev 07)
+7f:0a.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Power Control Unit 0 [8086:3cc0] (rev 07)
+7f:0a.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Power Control Unit 1 [8086:3cc1] (rev 07)
+7f:0a.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Power Control Unit 2 [8086:3cc2] (rev 07)
+7f:0a.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Power Control Unit 3 [8086:3cd0] (rev 07)
+7f:0b.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Interrupt Control Registers [8086:3ce0] (rev 07)
+7f:0b.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Semaphore and Scratchpad Configuration Registers [8086:3ce3] (rev 07)
+7f:0c.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+7f:0c.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+7f:0c.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+7f:0c.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+7f:0c.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller System Address Decoder 0 [8086:3cf4] (rev 07)
+7f:0c.7 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 System Address Decoder [8086:3cf6] (rev 07)
+7f:0d.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+7f:0d.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+7f:0d.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+7f:0d.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+7f:0d.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller System Address Decoder 1 [8086:3cf5] (rev 07)
+7f:0e.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Processor Home Agent [8086:3ca0] (rev 07)
+7f:0e.1 Performance counters [1101]: Intel Corporation Xeon E5/Core i7 Processor Home Agent Performance Monitoring [8086:3c46] (rev 07)
+7f:0f.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Registers [8086:3ca8] (rev 07)
+7f:0f.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller RAS Registers [8086:3c71] (rev 07)
+7f:0f.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 0 [8086:3caa] (rev 07)
+7f:0f.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 1 [8086:3cab] (rev 07)
+7f:0f.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 2 [8086:3cac] (rev 07)
+7f:0f.5 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 3 [8086:3cad] (rev 07)
+7f:0f.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 4 [8086:3cae] (rev 07)
+7f:10.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 0 [8086:3cb0] (rev 07)
+7f:10.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 1 [8086:3cb1] (rev 07)
+7f:10.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 0 [8086:3cb2] (rev 07)
+7f:10.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 1 [8086:3cb3] (rev 07)
+7f:10.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 2 [8086:3cb4] (rev 07)
+7f:10.5 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 3 [8086:3cb5] (rev 07)
+7f:10.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 2 [8086:3cb6] (rev 07)
+7f:10.7 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 3 [8086:3cb7] (rev 07)
+7f:11.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DDRIO [8086:3cb8] (rev 07)
+7f:13.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 R2PCIe [8086:3ce4] (rev 07)
+7f:13.1 Performance counters [1101]: Intel Corporation Xeon E5/Core i7 Ring to PCI Express Performance Monitor [8086:3c43] (rev 07)
+7f:13.4 Performance counters [1101]: Intel Corporation Xeon E5/Core i7 QuickPath Interconnect Agent Ring Registers [8086:3ce6] (rev 07)
+7f:13.5 Performance counters [1101]: Intel Corporation Xeon E5/Core i7 Ring to QuickPath Interconnect Link 0 Performance Monitor [8086:3c44] (rev 07)
+7f:13.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Ring to QuickPath Interconnect Link 1 Performance Monitor [8086:3c45] (rev 07)
+80:01.0 PCI bridge [0604]: Intel Corporation Xeon E5/Core i7 IIO PCI Express Root Port 1a [8086:3c02] (rev 07)
+80:02.0 PCI bridge [0604]: Intel Corporation Xeon E5/Core i7 IIO PCI Express Root Port 2a [8086:3c04] (rev 07)
+80:03.0 PCI bridge [0604]: Intel Corporation Xeon E5/Core i7 IIO PCI Express Root Port 3a in PCI Express Mode [8086:3c08] (rev 07)
+80:04.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 0 [8086:3c20] (rev 07)
+80:04.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 1 [8086:3c21] (rev 07)
+80:04.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 2 [8086:3c22] (rev 07)
+80:04.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 3 [8086:3c23] (rev 07)
+80:04.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 4 [8086:3c24] (rev 07)
+80:04.5 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 5 [8086:3c25] (rev 07)
+80:04.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 6 [8086:3c26] (rev 07)
+80:04.7 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DMA Channel 7 [8086:3c27] (rev 07)
+80:05.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Address Map, VTd_Misc, System Management [8086:3c28] (rev 07)
+80:05.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Control Status and Global Errors [8086:3c2a] (rev 07)
+80:05.4 PIC [0800]: Intel Corporation Xeon E5/Core i7 I/O APIC [8086:3c2c] (rev 07)
+81:00.0 Memory controller [0580]: Xilinx Corporation Device [10ee:7004]
+ff:08.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link 0 [8086:3c80] (rev 07)
+ff:08.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link Reut 0 [8086:3c83] (rev 07)
+ff:08.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link Reut 0 [8086:3c84] (rev 07)
+ff:09.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link 1 [8086:3c90] (rev 07)
+ff:09.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link Reut 1 [8086:3c93] (rev 07)
+ff:09.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 QPI Link Reut 1 [8086:3c94] (rev 07)
+ff:0a.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Power Control Unit 0 [8086:3cc0] (rev 07)
+ff:0a.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Power Control Unit 1 [8086:3cc1] (rev 07)
+ff:0a.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Power Control Unit 2 [8086:3cc2] (rev 07)
+ff:0a.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Power Control Unit 3 [8086:3cd0] (rev 07)
+ff:0b.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Interrupt Control Registers [8086:3ce0] (rev 07)
+ff:0b.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Semaphore and Scratchpad Configuration Registers [8086:3ce3] (rev 07)
+ff:0c.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+ff:0c.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+ff:0c.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+ff:0c.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+ff:0c.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller System Address Decoder 0 [8086:3cf4] (rev 07)
+ff:0c.7 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 System Address Decoder [8086:3cf6] (rev 07)
+ff:0d.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+ff:0d.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+ff:0d.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+ff:0d.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Unicast Register 0 [8086:3ce8] (rev 07)
+ff:0d.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller System Address Decoder 1 [8086:3cf5] (rev 07)
+ff:0e.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Processor Home Agent [8086:3ca0] (rev 07)
+ff:0e.1 Performance counters [1101]: Intel Corporation Xeon E5/Core i7 Processor Home Agent Performance Monitoring [8086:3c46] (rev 07)
+ff:0f.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Registers [8086:3ca8] (rev 07)
+ff:0f.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller RAS Registers [8086:3c71] (rev 07)
+ff:0f.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 0 [8086:3caa] (rev 07)
+ff:0f.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 1 [8086:3cab] (rev 07)
+ff:0f.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 2 [8086:3cac] (rev 07)
+ff:0f.5 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 3 [8086:3cad] (rev 07)
+ff:0f.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 4 [8086:3cae] (rev 07)
+ff:10.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 0 [8086:3cb0] (rev 07)
+ff:10.1 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 1 [8086:3cb1] (rev 07)
+ff:10.2 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 0 [8086:3cb2] (rev 07)
+ff:10.3 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 1 [8086:3cb3] (rev 07)
+ff:10.4 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 2 [8086:3cb4] (rev 07)
+ff:10.5 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 3 [8086:3cb5] (rev 07)
+ff:10.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 2 [8086:3cb6] (rev 07)
+ff:10.7 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 3 [8086:3cb7] (rev 07)
+ff:11.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 DDRIO [8086:3cb8] (rev 07)
+ff:13.0 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 R2PCIe [8086:3ce4] (rev 07)
+ff:13.1 Performance counters [1101]: Intel Corporation Xeon E5/Core i7 Ring to PCI Express Performance Monitor [8086:3c43] (rev 07)
+ff:13.4 Performance counters [1101]: Intel Corporation Xeon E5/Core i7 QuickPath Interconnect Agent Ring Registers [8086:3ce6] (rev 07)
+ff:13.5 Performance counters [1101]: Intel Corporation Xeon E5/Core i7 Ring to QuickPath Interconnect Link 0 Performance Monitor [8086:3c44] (rev 07)
+ff:13.6 System peripheral [0880]: Intel Corporation Xeon E5/Core i7 Ring to QuickPath Interconnect Link 1 Performance Monitor [8086:3c45] (rev 07)
+root@c0101:/sys/bus/pci/drivers/igb_uio# lspci -nn | grep 82576
+07:00.0 Ethernet controller [0200]: Intel Corporation 82576 Gigabit Network Connection [8086:10c9] (rev 01)
+07:00.1 Ethernet controller [0200]: Intel Corporation 82576 Gigabit Network Connection [8086:10c9] (rev 01)
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo  8086:10c9 >    
+bind       module/    new_id     remove_id  uevent     unbind    
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo  8086 10c9 > new_id
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 07:00.1 > bind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > bind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls -l
+total 0
+lrwxrwxrwx 1 root root    0 Dec 14 00:29 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w------- 1 root root 4096 Dec 14 00:28 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w------- 1 root root 4096 Dec 14 00:28 new_id
+--w------- 1 root root 4096 Dec 14 00:17 remove_id
+--w------- 1 root root 4096 Dec 14 00:16 uevent
+--w------- 1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1840568 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:108625 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152182528 (145.1 MiB)  TX bytes:11846739 (11.2 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+eth2      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7e 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df9a0000-df9bffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll       
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:29 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:28 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:28 new_id
+--w-------  1 root root 4096 Dec 14 00:17 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:28 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:28 new_id
+--w-------  1 root root 4096 Dec 14 00:17 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:30 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ifconfig                  
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1840759 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:108739 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152199385 (145.1 MiB)  TX bytes:11863787 (11.3 MiB)
+          Memory:dfd20000-dfd3ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb_uio# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1840781 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:108753 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152201213 (145.1 MiB)  TX bytes:11866251 (11.3 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+eth2      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7e 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df9a0000-df9bffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+<none>
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:07:00.1 '82576 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll  
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:28 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:28 new_id
+--w-------  1 root root 4096 Dec 14 00:17 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:30 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > bind
+root@c0101:/sys/bus/pci/drivers/igb_uio# cat new_id
+cat: new_id: Permission denied
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll  
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:31 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:31 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:28 new_id
+--w-------  1 root root 4096 Dec 14 00:17 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:30 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 8086 10c9 > remove_id
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:31 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:31 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:28 new_id
+--w-------  1 root root 4096 Dec 14 00:32 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:30 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1841194 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:108941 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152236778 (145.1 MiB)  TX bytes:11892023 (11.3 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+eth2      Link encap:Ethernet  HWaddr 00:e0:ed:2f:0a:7e 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:df9a0000-df9bffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:31 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:31 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:28 new_id
+--w-------  1 root root 4096 Dec 14 00:32 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:30 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:31 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:28 new_id
+--w-------  1 root root 4096 Dec 14 00:32 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:33 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+<none>
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:07:00.1 '82576 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > bind                
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:33 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:28 new_id
+--w-------  1 root root 4096 Dec 14 00:32 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:33 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 8086 10c9 > new_id
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:33 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:33 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:33 new_id
+--w-------  1 root root 4096 Dec 14 00:32 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:33 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:33 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:33 new_id
+--w-------  1 root root 4096 Dec 14 00:32 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:34 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > bind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:35 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:35 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:33 new_id
+--w-------  1 root root 4096 Dec 14 00:32 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:34 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 0000:07:00.1 > unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio#
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:35 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:33 new_id
+--w-------  1 root root 4096 Dec 14 00:32 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:35 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 8086 10c9 > remove_id
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:35 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:33 new_id
+--w-------  1 root root 4096 Dec 14 00:35 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:35 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+<none>
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+0000:07:00.0 '82576 Gigabit Network Connection' if=eth2 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:07:00.1 '82576 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# cd ..
+root@c0101:/sys/bus/pci/drivers# cd igb
+root@c0101:/sys/bus/pci/drivers/igb# ls
+0000:04:00.0  0000:04:00.1  0000:07:00.0  bind    module    new_id    remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb# ll 
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:17 unbind
+root@c0101:/sys/bus/pci/drivers/igb# echo 0000:07:00.0 > unbind
+root@c0101:/sys/bus/pci/drivers/igb# cd ..
+root@c0101:/sys/bus/pci/drivers# cd igb_uio/
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls -l
+total 0
+--w------- 1 root root 4096 Dec 14 00:35 bind
+lrwxrwxrwx 1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w------- 1 root root 4096 Dec 14 00:33 new_id
+--w------- 1 root root 4096 Dec 14 00:35 remove_id
+--w------- 1 root root 4096 Dec 14 00:16 uevent
+--w------- 1 root root 4096 Dec 14 00:35 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 8086 10c9 > remove_id
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+--w-------  1 root root 4096 Dec 14 00:35 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:33 new_id
+--w-------  1 root root 4096 Dec 14 00:36 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:35 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+<none>
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:07:00.0 '82576 Gigabit Network Connection' unused=igb_uio
+0000:07:00.1 '82576 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# echo 8086 10c9 > new_id   
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec 14 00:16 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:37 0000:07:00.0 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:37 0000:07:00.1 -> ../../../../devices/pci0000:00/0000:00:03.0/0000:07:00.1
+--w-------  1 root root 4096 Dec 14 00:35 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:17 module -> ../../../../module/igb_uio
+--w-------  1 root root 4096 Dec 14 00:37 new_id
+--w-------  1 root root 4096 Dec 14 00:36 remove_id
+--w-------  1 root root 4096 Dec 14 00:16 uevent
+--w-------  1 root root 4096 Dec 14 00:35 unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# cd ..
+root@c0101:/sys/bus/pci/drivers# ls
+agpgart-intel  dw_dmac_pci  e1000e        i801_smbus  igb_uio      isci     lpc_ich      megaraid_sas    mpt2sas  mptsas    pcieport       r8168      snbep_uncore  vmw_pvscsi
+ahci           e100        ehci-pci        i915        ioatdma      ixgb     megaraid      mlx4_core    mpt3sas  mptspi    pwm-lpss       sdhci-pci  tg3        vmxnet3
+ata_piix       e1000        i2c-designware-pci    igb        iosf_mbi_pci  ixgbe  megaraid_legacy  mlx5_core    mptfc     ohci-pci  pxa2xx_spi_pci  serial     uhci_hcd        xhci_hcd
+root@c0101:/sys/bus/pci/drivers# cd igb
+root@c0101:/sys/bus/pci/drivers/igb# ls
+0000:04:00.0  0000:04:00.1  bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1842445 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:109541 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152344087 (145.2 MiB)  TX bytes:11975187 (11.4 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb# cd /opt/dpdk/
+root@c0101:/opt/dpdk# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.0 '82576 Gigabit Network Connection' drv=igb_uio unused=
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/opt/dpdk# cd -
+/sys/bus/pci/drivers/igb
+root@c0101:/sys/bus/pci/drivers/igb# ls
+0000:04:00.0  0000:04:00.1  bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:36 unbind
+root@c0101:/sys/bus/pci/drivers/igb# lspci | grep i350
+root@c0101:/sys/bus/pci/drivers/igb# lspci | grep 350
+04:00.0 Ethernet controller: Intel Corporation I350 Gigabit Network Connection (rev 01)
+04:00.1 Ethernet controller: Intel Corporation I350 Gigabit Network Connection (rev 01)
+root@c0101:/sys/bus/pci/drivers/igb#
+root@c0101:/sys/bus/pci/drivers/igb#
+root@c0101:/sys/bus/pci/drivers/igb# lspci -nn | grep 350
+04:00.0 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+04:00.1 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+root@c0101:/sys/bus/pci/drivers/igb# ls
+0000:04:00.0  0000:04:00.1  bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:36 unbind
+root@c0101:/sys/bus/pci/drivers/igb# echo 04:00.1 > unbind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb# echo 0000:04:00.1 > unbind
+root@c0101:/sys/bus/pci/drivers/igb#
+root@c0101:/sys/bus/pci/drivers/igb#
+root@c0101:/sys/bus/pci/drivers/igb#
+root@c0101:/sys/bus/pci/drivers/igb# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1843103 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:109774 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152401478 (145.3 MiB)  TX bytes:12005669 (11.4 MiB)
+          Memory:dfd20000-dfd3ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.0 '82576 Gigabit Network Connection' drv=igb_uio unused=
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+
+Other network devices
+=====================
+0000:04:00.1 'I350 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb# ls
+0000:04:00.0  bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:41 unbind
+root@c0101:/sys/bus/pci/drivers/igb# lspci -nn | grep 350
+04:00.0 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+04:00.1 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+root@c0101:/sys/bus/pci/drivers/igb# echo 8086 1521 > new_id
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:41 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:41 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:41 unbind
+root@c0101:/sys/bus/pci/drivers/igb# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52 
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1843316 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:109874 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152419152 (145.3 MiB)  TX bytes:12021125 (11.4 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53 
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.0 '82576 Gigabit Network Connection' drv=igb_uio unused=
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb# cd ..
+root@c0101:/sys/bus/pci/drivers# cd igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls
+0000:07:00.0  0000:07:00.1  bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+
+
