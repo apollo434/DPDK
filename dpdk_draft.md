@@ -1300,3 +1300,94 @@ Regarding IOMMU/VFIO:
 
 
 ***
+
+```
+Regarding how to init per-cpu thread, and how to remote launch
+
+rte_eal_init()
+{
+....
+  pthread_create(eal_thread_loop)
+....
+}  
+
+eal_thread_loop()
+{
+....
+  eal_thread_set_affinity()
+....  
+          /* read on our pipe to get commands */
+        while (1) {
+                void *fct_arg;
+
+                /* wait command */
+                do {
+                        n = read(m2s, &c, 1);
+                } while (n < 0 && errno == EINTR);
+
+                if (n <= 0)
+                        rte_panic("cannot read on configuration pipe\n");
+
+                lcore_config[lcore_id].state = RUNNING;
+
+                /* send ack */
+                n = 0;
+                while (n == 0 || (n < 0 && errno == EINTR))
+                        n = write(s2m, &c, 1);
+                if (n < 0)
+                        rte_panic("cannot write on configuration pipe\n");
+
+                if (lcore_config[lcore_id].f == NULL)
+                        rte_panic("NULL function pointer\n");
+
+                /* call the function and store the return value */
+                fct_arg = lcore_config[lcore_id].arg;
+                ret = lcore_config[lcore_id].f(fct_arg);
+                lcore_config[lcore_id].ret = ret;
+                rte_wmb();
+                lcore_config[lcore_id].state = FINISHED;
+        }
+....
+}
+
+
+/*
+ * Send a message to a slave lcore identified by slave_id to call a
+ * function f with argument arg. Once the execution is done, the
+ * remote lcore switch in FINISHED state.
+ */
+int
+rte_eal_remote_launch(int (*f)(void *), void *arg, unsigned slave_id)
+{
+        int n;
+        char c = 0;
+        int m2s = lcore_config[slave_id].pipe_master2slave[1];
+        int s2m = lcore_config[slave_id].pipe_slave2master[0];
+
+        if (lcore_config[slave_id].state != WAIT)
+                return -EBUSY;
+
+        lcore_config[slave_id].f = f;
+        lcore_config[slave_id].arg = arg;
+
+        /* send message */
+        n = 0;
+        while (n == 0 || (n < 0 && errno == EINTR))
+                n = write(m2s, &c, 1);
+        if (n < 0)
+                rte_panic("cannot write on configuration pipe\n");
+
+        /* wait ack */
+        do {
+                n = read(s2m, &c, 1);
+        } while (n < 0 && errno == EINTR);
+
+        if (n <= 0)
+                rte_panic("cannot read on configuration pipe\n");
+
+        return 0;
+}
+
+after set cpu affinity with thread, later, only go through read/write in rte_eal_remote_launch() to complete other function run in specific cpu
+
+```
