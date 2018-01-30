@@ -806,7 +806,6 @@ struct eth_dev_ops {
 
 
 ```
-***
 Regarding how to init the rx_queues[], which will be used in rx progress
 
 
@@ -1078,4 +1077,226 @@ struct rte_fslmc_bus rte_fslmc_bus = {
 };
 
 ```
+***
+
+```
+Regarding how to bind/unbind the networking driver to dpdk, it means what's the actions of dpdk_nic_bind.py, please check the informations below:
+
+Example:
+root@c0101:/sys/bus/pci/drivers/igb# lspci -nn | grep 350
+04:00.0 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+04:00.1 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+root@c0101:/sys/bus/pci/drivers/igb# ls
+0000:04:00.0  0000:04:00.1  bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:15 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:36 unbind
+root@c0101:/sys/bus/pci/drivers/igb# echo 04:00.1 > unbind
+-sh: echo: write error: No such device
+root@c0101:/sys/bus/pci/drivers/igb# echo 0000:04:00.1 > unbind
+root@c0101:/sys/bus/pci/drivers/igb#
+root@c0101:/sys/bus/pci/drivers/igb#
+root@c0101:/sys/bus/pci/drivers/igb#
+root@c0101:/sys/bus/pci/drivers/igb# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1843103 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:109774 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152401478 (145.3 MiB)  TX bytes:12005669 (11.4 MiB)
+          Memory:dfd20000-dfd3ffff
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.0 '82576 Gigabit Network Connection' drv=igb_uio unused=
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+
+Other network devices
+=====================
+0000:04:00.1 'I350 Gigabit Network Connection' unused=igb_uio
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb# ls
+0000:04:00.0  bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:10 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:41 unbind
+root@c0101:/sys/bus/pci/drivers/igb# lspci -nn | grep 350
+04:00.0 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+04:00.1 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
+root@c0101:/sys/bus/pci/drivers/igb# echo 8086 1521 > new_id
+root@c0101:/sys/bus/pci/drivers/igb# ll
+total 0
+drwxr-xr-x  2 root root    0 Dec  2 22:54 .
+drwxr-xr-x 44 root root    0 Dec  2 22:54 ..
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 0000:04:00.0 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.0
+lrwxrwxrwx  1 root root    0 Dec 14 00:41 0000:04:00.1 -> ../../../../devices/pci0000:00/0000:00:01.1/0000:04:00.1
+--w-------  1 root root 4096 Dec 14 00:15 bind
+lrwxrwxrwx  1 root root    0 Dec 14 00:10 module -> ../../../../module/igb
+--w-------  1 root root 4096 Dec 14 00:41 new_id
+--w-------  1 root root 4096 Dec 14 00:10 remove_id
+--w-------  1 root root 4096 Dec  2 22:54 uevent
+--w-------  1 root root 4096 Dec 14 00:41 unbind
+root@c0101:/sys/bus/pci/drivers/igb# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:52
+          inet addr:128.224.155.26  Bcast:128.224.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::225:90ff:fec9:b352/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1843316 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:109874 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:152419152 (145.3 MiB)  TX bytes:12021125 (11.4 MiB)
+          Memory:dfd20000-dfd3ffff
+
+eth1      Link encap:Ethernet  HWaddr 00:25:90:c9:b3:53
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Memory:dfd00000-dfd1ffff
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:3 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:784 (784.0 B)  TX bytes:784 (784.0 B)
+
+sit0      Link encap:UNSPEC  HWaddr 00-00-00-00-30-30-30-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@c0101:/sys/bus/pci/drivers/igb# /opt/dpdk/tools/dpdk_nic_bind.py --status
+
+Network devices using DPDK-compatible driver
+============================================
+0000:07:00.0 '82576 Gigabit Network Connection' drv=igb_uio unused=
+0000:07:00.1 '82576 Gigabit Network Connection' drv=igb_uio unused=
+
+Network devices using kernel driver
+===================================
+0000:04:00.0 'I350 Gigabit Network Connection' if=eth0 drv=igb unused=igb_uio *Active*
+0000:04:00.1 'I350 Gigabit Network Connection' if=eth1 drv=igb unused=igb_uio
+
+Other network devices
+=====================
+0000:81:00.0 'Device 7004' unused=igb_uio
+root@c0101:/sys/bus/pci/drivers/igb# cd ..
+root@c0101:/sys/bus/pci/drivers# cd igb_uio
+root@c0101:/sys/bus/pci/drivers/igb_uio# ls
+0000:07:00.0  0000:07:00.1  bind  module  new_id  remove_id  uevent  unbind
+root@c0101:/sys/bus/pci/drivers/igb_uio# ll
+
+=========================================================================
+How to deal with the param of sysfs: DEVICE_ATTR
+
+DEVICE_ATTR的使用
+
+使用DEVICE_ATTR，可以在sys fs中添加“文件”，通过修改该文件内容，可以实现在运行过程中动态控制device的目的。
+类似的还有DRIVER_ATTR，BUS_ATTR，CLASS_ATTR。
+这几个东东的区别就是，DEVICE_ATTR对应的文件在/sys/devices/目录中对应的device下面。
+而其他几个分别在driver，bus，class中对应的目录下。
+这次主要介绍DEVICE_ATTR，其他几个类似。
+在documentation/driver-model/Device.txt中有对DEVICE_ATTR的详细介绍，这儿主要说明使用方法。
+
+先看看DEVICE_ATTR的原型：
+DEVICE_ATTR(_name, _mode, _show, _store)
+_name：名称，也就是将在sys fs中生成的文件名称。
+_mode：上述文件的访问权限，与普通文件相同，UGO的格式。
+_show：显示函数，cat该文件时，此函数被调用。
+_store：写函数，echo内容到该文件时，此函数被调用。
+
+看看我们怎么填充这些要素：
+名称可以随便起一个，便于记忆，并能体现其功能即可。
+模式可以为只读0444，只写0222，或者读写都行的0666。当然也可以对User\Group\Other进行区别。
+显示和写入函数就需要实现了。
+
+```
+***
+Regarding IOMMU/VFIO:
+1. IOMMU
+
+**IOMMU**
+![Alt text](/pic/iommu.png)
+
+
+**IOMMU Topology**
+![Alt text](/pic/IOMMU_Topo.png)
+
+2. VFIO
+与KVM一样，用户态通过IOCTL与VFIO交互。可作为操作对象的几种文件描述符有：
+
+   Container文件描述符
+       打开/dev/vfio字符设备可得
+   IOMMU group文件描述符
+       打开/dev/vfio/N文件可得 (详见后文)
+   Device文件描述符
+       向IOMMU group文件描述符发起相关ioctl可得
+
+逻辑上来说，IOMMU group是IOMMU操作的最小对象。某些IOMMU硬件支持将若干IOMMU group组成更大的单元。VFIO据此做出container的概念，可容纳多个IOMMU group。打开/dev/vfio文件即新建一个空的container。在VFIO中，container是IOMMU操作的最小对象。
+
+要使用VFIO，需先将设备与原驱动拨离，并与VFIO绑定。
+
+用VFIO访问硬件的步骤：
+
+   打开设备所在IOMMU group在/dev/vfio/目录下的文件
+   使用VFIO_GROUP_GET_DEVICE_FD得到表示设备的文件描述 (参数为设备名称，一个典型的PCI设备名形如0000:03.00.01)
+   对设备进行read/write/mmap等操作
+
+用VFIO配置IOMMU的步骤：
+
+   打开/dev/vfio，得到container文件描述符
+   用VFIO_SET_IOMMU绑定一种IOMMU实现层
+   打开/dev/vfio/N，得到IOMMU group文件描述符
+   用VFIO_GROUP_SET_CONTAINER将IOMMU group加入container
+   用VFIO_IOMMU_MAP_DMA将此IOMMU group的DMA地址映射至进程虚拟地址空间
+
+
+
 ***
